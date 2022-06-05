@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c6307a6c-4c02-4ede-97c5-4e4acf032714" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="onerrorcontinuepocFlow" doc:id="bf446fec-367d-4020-a067-804b5227d50f" >
+		<http:listener doc:name="Listener" doc:id="15e3a453-e1d5-4393-9218-0c2c4d96368d" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="6d52e8ee-e761-4f41-8993-e25229956836" />
+		<logger level="INFO" doc:name="Logger" doc:id="506282ef-15f5-4aa1-a669-a2ddc9c340ab" />
+		<validation:is-null doc:name="Is null" doc:id="5b803ca3-9b9e-40fb-8377-5e726d597ca6" value="#[payload]"/>
+		<set-payload value="after error" doc:name="Set Payload" doc:id="8277a3f3-fa20-4ec8-8f67-a86ebd5e1ca6" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="37a84b5a-1ccd-4410-9959-a1867b9c0946" >
+				<set-payload value="i am inside OEC" doc:name="Set Payload" doc:id="e06b5e46-2a68-4cf0-9637-bd4882f6bc8b" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>
